@@ -115,10 +115,7 @@ body {
     color: var(--text-primary);
     background: var(--bg-deep);
     min-height: 100vh;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    overflow-x: hidden;
 }
 
 a {
@@ -515,6 +512,76 @@ button {
 
 .tech-item:hover .tech-label {
     color: var(--text-primary);
+}
+
+/* ─── Featured Tech Item ─── */
+.tech-item--featured {
+    position: relative;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    padding: 0.5rem 0.85rem 0.5rem 0.55rem;
+    animation: featuredPulse 2.5s ease-in-out infinite;
+    overflow: hidden;
+}
+
+.tech-item--featured::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        105deg,
+        transparent 30%,
+        rgba(255, 255, 255, 0.08) 45%,
+        rgba(255, 255, 255, 0.14) 50%,
+        rgba(255, 255, 255, 0.08) 55%,
+        transparent 70%
+    );
+    animation: featuredShimmer 3s ease-in-out infinite;
+    pointer-events: none;
+}
+
+.tech-item--featured img {
+    width: 20px;
+    height: 20px;
+    filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.3));
+}
+
+.tech-item--featured .tech-label {
+    color: rgba(255, 255, 255, 0.90);
+    font-weight: 700;
+    font-size: 0.68rem;
+    letter-spacing: 0.03em;
+}
+
+.tech-item--featured:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.35);
+    transform: translateY(-3px) scale(1.04);
+    box-shadow:
+        0 6px 20px rgba(255, 255, 255, 0.10),
+        0 0 15px rgba(255, 255, 255, 0.06);
+}
+
+.tech-item--featured:hover .tech-label {
+    color: #fff;
+}
+
+@keyframes featuredPulse {
+    0%, 100% {
+        box-shadow:
+            0 0 8px rgba(255, 255, 255, 0.08),
+            0 0 0 rgba(255, 255, 255, 0);
+    }
+    50% {
+        box-shadow:
+            0 0 14px rgba(255, 255, 255, 0.14),
+            0 0 30px rgba(255, 255, 255, 0.04);
+    }
+}
+
+@keyframes featuredShimmer {
+    0% { transform: translateX(-100%); }
+    50%, 100% { transform: translateX(100%); }
 }
 
 /* ─── Social Row ─── */
