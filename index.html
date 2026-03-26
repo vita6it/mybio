@@ -40,9 +40,13 @@
          VIDEO BACKGROUND
     ═══════════════════════════════════════════ -->
     <div class="video-bg">
-        <video autoplay muted loop playsinline id="bgVideo">
-            <source src="https://r2.guns.lol/c77464ae-efd7-44fb-96d3-cc696a1e16e3.mp4" type="video/mp4">
+        <div class="video-loader" id="videoLoader">
+            <div class="video-loader__spinner"></div>
+        </div>
+        <video autoplay muted loop playsinline preload="auto" id="bgVideo">
+            <source src="assets/TATTOO COLOUR - ขาหมู  [Official Music Video] (1).mp4" type="video/mp4">
         </video>
+        <div class="video-overlay"></div>
     </div>
 
     <!-- ═══════════════════════════════════════════
@@ -344,14 +348,6 @@
 
         </div>
     </main>
-
-    <!-- ═══════════════════════════════════════════
-         BACKGROUND MUSIC (local MP3)
-    ═══════════════════════════════════════════ -->
-    <audio id="bgMusic" loop preload="auto">
-        <source src="assets/Old%20Love%20-%20Yuji%20_%20Putri%20Dahlia%20%28Official%20Lyrics%20Video%29.mp3"
-            type="audio/mpeg">
-    </audio>
 
     <!-- ═══════════════════════════════════════════
          SOUND TOGGLE (bottom-right)

@@ -5,26 +5,10 @@
 // ─── DOM Ready ────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
 
-    // ─── Background Music (local MP3) ─────────────────────
-    const bgMusic = document.getElementById('bgMusic');
-    let audioReady = false;
+    const bgVideo = document.getElementById('bgVideo');
     let musicPlaying = false;
 
-    if (bgMusic) {
-        bgMusic.volume = 0.5;
-
-        // Wait until browser has enough data to play through without stopping
-        bgMusic.addEventListener('canplaythrough', () => {
-            audioReady = true;
-        });
-
-        // If already buffered (cached)
-        if (bgMusic.readyState >= 4) {
-            audioReady = true;
-        }
-    }
-
-    // ─── Enter Screen (click to enter + autoplay music) ───
+    // ─── Enter Screen (click to enter + unmute video audio) ───
     const enterScreen = document.getElementById('enterScreen');
     const soundBtn = document.getElementById('soundToggle');
     const iconOn = soundBtn ? soundBtn.querySelector('.sound-on') : null;
@@ -34,18 +18,20 @@ document.addEventListener('DOMContentLoaded', () => {
         enterScreen.addEventListener('click', () => {
             // Fade out the enter screen
             enterScreen.classList.add('hidden');
+            musicPlaying = true;
 
-            // Start music
-            if (bgMusic) {
-                bgMusic.play().catch(err => {
-                    console.log('Audio play failed:', err);
+            // Unmute the background video to enable audio
+            if (bgVideo) {
+                bgVideo.muted = false;
+                bgVideo.volume = 0.5;
+                bgVideo.play().catch(err => {
+                    console.log('Video play failed:', err);
                 });
-                musicPlaying = true;
-
-                // Update sound toggle icon to show "playing" state
-                if (iconOn) iconOn.style.display = 'block';
-                if (iconOff) iconOff.style.display = 'none';
             }
+
+            // Update sound toggle icon to show "playing" state
+            if (iconOn) iconOn.style.display = 'block';
+            if (iconOff) iconOff.style.display = 'none';
 
             // Remove from DOM after transition
             setTimeout(() => {
@@ -54,25 +40,18 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // ─── Sound Toggle (controls local MP3 music) ──────────
-    if (soundBtn && bgMusic) {
-
+    // ─── Sound Toggle (controls video audio) ──────────────
+    if (soundBtn) {
         soundBtn.addEventListener('click', () => {
             if (musicPlaying) {
-                bgMusic.pause();
+                if (bgVideo) bgVideo.muted = true;
                 musicPlaying = false;
                 if (iconOn) iconOn.style.display = 'none';
                 if (iconOff) iconOff.style.display = 'block';
             } else {
-                if (!audioReady) {
-                    bgMusic.load();
-                    bgMusic.addEventListener('canplaythrough', () => {
-                        bgMusic.play();
-                    }, { once: true });
-                } else {
-                    bgMusic.play().catch(err => {
-                        console.log('Audio play failed:', err);
-                    });
+                if (bgVideo) {
+                    bgVideo.muted = false;
+                    bgVideo.volume = 0.5;
                 }
                 musicPlaying = true;
                 if (iconOn) iconOn.style.display = 'block';
@@ -152,16 +131,39 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // ─── Video load fallback ──────────────────────────────
-    const video = document.getElementById('bgVideo');
-    if (video) {
-        video.addEventListener('error', () => {
-            const bg = document.querySelector('.video-bg');
-            if (bg) bg.style.background = '#050507';
+    // ─── Video Loader / Buffering Spinner ──────────────────
+    const videoLoader = document.getElementById('videoLoader');
+    if (bgVideo && videoLoader) {
+        // Video is ready to play smoothly
+        function showVideo() {
+            bgVideo.classList.add('ready');
+            videoLoader.classList.add('hidden');
+        }
+
+        // Video is buffering / stalling
+        function showLoader() {
+            bgVideo.classList.remove('ready');
+            videoLoader.classList.remove('hidden');
+        }
+
+        // When enough data is buffered
+        bgVideo.addEventListener('canplaythrough', showVideo);
+
+        // If already buffered (cached)
+        if (bgVideo.readyState >= 4) {
+            showVideo();
+        }
+
+        // Show spinner again if video stalls during playback
+        bgVideo.addEventListener('waiting', showLoader);
+        bgVideo.addEventListener('playing', showVideo);
+
+        // Error fallback
+        bgVideo.addEventListener('error', () => {
+            videoLoader.classList.add('hidden');
+            document.querySelector('.video-bg').style.background = '#050507';
         });
     }
-
-
 
 
     // ─── Toast Notification System ────────────────────────
