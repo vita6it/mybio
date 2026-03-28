@@ -327,9 +327,8 @@ button {
         0 12px 48px rgba(0, 0, 0, 0.55),
         inset 0 1px 0 rgba(255, 255, 255, 0.06);
 
-    /* Entrance + Float */
-    animation: cardIn 1s cubic-bezier(0.22, 1, 0.36, 1) forwards,
-        cardFloat 4s ease-in-out 1s infinite;
+    /* Entrance */
+    animation: cardIn 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
     opacity: 0;
     transform: translateY(30px) scale(0.97);
 
