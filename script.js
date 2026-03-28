@@ -6,6 +6,11 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     const bgVideo = document.getElementById('bgVideo');
+    if (bgVideo) {
+        // Skip first 5 seconds
+        const skipIntro = () => { bgVideo.currentTime = 5; };
+        bgVideo.readyState >= 1 ? skipIntro() : bgVideo.addEventListener('loadedmetadata', skipIntro);
+    }
     let musicPlaying = false;
 
     // ─── Enter Screen (click to enter + unmute video audio) ───
